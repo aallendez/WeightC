@@ -15,15 +15,21 @@ void saveNewEntry(FILE *file) {
     scanf("%s", newEntry.date);
 
 
-    fprintf(file, "%s,%s,%s, %s \n", newEntry.name, newEntry.lastName, newEntry.weight, newEntry.date);
-
+   fprintf(file, "first name of the person: %s \n", newEntry.name);
+    fprintf(file, "Last name of the person: %s \n", newEntry.lastName);
+     fprintf(file, "weight of the person: %s\n ", newEntry.weight);
+      fprintf(file, "date of the recording: %s \n", newEntry.date);
+     
     printf("New entry saved successfully!\n");
 }
 
 void retrieveInformation(FILE *file) { 
-    
-    // Rewind the file pointer to the beginning of the file
     rewind(file);
+  fseek(file, 0, SEEK_END); // Move file pointer to the end
+    if (ftell(file) == 0) { // Check if file pointer is at the beginning
+        printf("The file does not contain any information yet.\n");        // This code is from chatgpt please if you can, change it!!!
+        return;
+    }
     printf("%s \n \n", "This are Your stats G");
   
 
