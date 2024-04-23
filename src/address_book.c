@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "address_book.h"
+#include "time.h"
 #define MAX_LINE_SIZE 1024 // Change the value as per your requirement
 void saveNewEntry(FILE *file) {
     struct AddressBookEntry newEntry;
@@ -11,25 +12,32 @@ void saveNewEntry(FILE *file) {
     scanf("%s", newEntry.lastName);
      printf("weight: ");
     scanf("%s", newEntry.weight);
-    printf("date: ");
-    scanf("%s", newEntry.date);
+
+  time_t currentTime;
+    time(&currentTime);
+
+    // Convert the time to a local time struct
+    struct tm *localTime = localtime(&currentTime);
+
+    // Extract date components
+    int year = localTime->tm_year + 1900; // Years since 1900
+    int month = localTime->tm_mon + 1;    // Months since January (0-11)
+    int day = localTime->tm_mday;         // Day of the month (1-31)
+
 
 
    fprintf(file, "first name of the person: %s \n", newEntry.name);
     fprintf(file, "Last name of the person: %s \n", newEntry.lastName);
      fprintf(file, "weight of the person: %s\n ", newEntry.weight);
-      fprintf(file, "date of the recording: %s \n", newEntry.date);
+      fprintf(file, "date of the recording: %d, %d, %d\n", day, month, year );
      
     printf("New entry saved successfully!\n");
 }
 
 void retrieveInformation(FILE *file) { 
+    
+    // Rewind the file pointer to the beginning of the file
     rewind(file);
-  fseek(file, 0, SEEK_END); // Move file pointer to the end
-    if (ftell(file) == 0) { // Check if file pointer is at the beginning
-        printf("The file does not contain any information yet.\n");        // This code is from chatgpt please if you can, change it!!!
-        return;
-    }
     printf("%s \n \n", "This are Your stats G");
   
 

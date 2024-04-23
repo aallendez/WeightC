@@ -53,5 +53,5 @@ int main() {
     return startup();
 }
 
-//                                                  gcc -o address_book main.c address_book.c validation.c 
+//                                                 gcc -o address_book main.c address_book.c validation.c  
 // don't judge me I don't like rewriting this shit
