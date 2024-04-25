@@ -52,7 +52,7 @@ int startup(const char *fileName) {
 }
 
 int main() {
-    printf("Enter the file name: ");
+    printf("Welcome to Alpha weightlifters \n Enter a new secret space to store your weight (or choose existing one (e.g., database.csv)):");
     scanf("%s", fileName);
     return startup(fileName);
 }

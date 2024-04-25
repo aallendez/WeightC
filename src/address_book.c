@@ -66,7 +66,7 @@ void modifyEntry(FILE *file, const char *fileName) {
                     }
                     break;
                 case 3:
-                    printf("Enter new weight: ");
+                    printf("Enter new weight (Integer): ");
                     scanf("%d", &entry.weight);
                     break;
                 case 4:
@@ -153,7 +153,7 @@ void saveNewEntry(FILE *file) {
             scanf("%s", newEntry.lastName);
         }
         
-        printf("Weight: ");
+        printf("Weight (Integer): ");
         scanf("%d", &newEntry.weight);
         
         int num; // Declare num variable.
