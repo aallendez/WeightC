@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "address_book.h"
+#include "validation.h"
 
 int startup() {
     int choice;
@@ -23,7 +26,7 @@ int startup() {
         printf("1. Save new entry\n");
         printf("2. Retrieve existing information from the file that is open\n");
         printf("3. Exit\n");
-        printf("4. change the file");
+        printf("4. change the file\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -54,4 +57,3 @@ int main() {
 }
 
 //                                                  gcc -o address_book main.c address_book.c validation.c 
-// don't judge me I don't like rewriting this shit
