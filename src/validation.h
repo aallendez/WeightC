@@ -1,7 +1,9 @@
 #ifndef VALIDATION_H
 #define VALIDATION_H
+#include <stdbool.h>
 
-int validateEmail(const char *email);
-int validatePhoneNumber(const char *phoneNumber);
+bool validateEmail(const char *email);
+bool validatePhoneNumber(const char *phoneNumber);
+bool validateDate(const char *date);
 
 #endif /* VALIDATION_H */
