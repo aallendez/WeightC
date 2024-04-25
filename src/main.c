@@ -4,17 +4,13 @@
 #include "address_book.h"
 #include "validation.h"
 
-int startup() {
+char fileName[100];
+
+int startup(const char *fileName) {
     int choice;
     FILE *file;
-    char filename[100];
-
-    printf("Welcome to Alpha weightlifters\n");
-
-    printf("Enter a new secret space to store your weight (or choose existing one (that also works)) (e.g., database.csv): ");
-    scanf("%s", filename);
-
-    file = fopen(filename, "a+"); // Open file in append mode
+    strcpy(initialFileName, fileName);
+    file = fopen(fileName, "a+"); // Open file in append mode
 
     if (file == NULL) {
         printf("Error opening file!\n");
@@ -23,10 +19,10 @@ int startup() {
 
     do {
         printf("\nSelect an option:\n");
-        printf("1. Save new entry\n");
+        printf("1. Save/Edit new entry\n");
         printf("2. Retrieve existing information from the file that is open\n");
         printf("3. Exit\n");
-        printf("4. change the file\n");
+        printf("4. Change the file\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -41,10 +37,13 @@ int startup() {
                 printf("Exiting program.\n");
                 break;
             case 4:
-                printf("which file do u Want to access? (if u miss Srry G u dumb)");
-                break;
+                printf("Enter the new file name: ");
+                scanf("%s", fileName);
+                fclose(file);
+                return startup(fileName);
             default:
                 printf("Invalid choice. Please try again.\n");
+                break;
         }
     } while (choice != 3);
 
@@ -53,7 +52,9 @@ int startup() {
 }
 
 int main() {
-    return startup();
+    printf("Enter the file name: ");
+    scanf("%s", fileName);
+    return startup(fileName);
 }
 
 //                                                  gcc -o address_book main.c address_book.c validation.c 
