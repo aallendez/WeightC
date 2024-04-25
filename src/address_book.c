@@ -161,7 +161,7 @@ void saveNewEntry(FILE *file) {
         int num; // Declare num variable.
         printf("To Use current date Press 1:\n");
         printf("To enter old date Press 2:\n");
-        printf("Enter your choice:");
+        printf("Enter your choice: ");
         scanf("%d", &num); 
 
         if (num == 2) {
@@ -214,9 +214,8 @@ void saveNewEntry(FILE *file) {
 void retrieveInformation(FILE *file) {
     int choice;
     printf("\nHow would you like to search for the data?\n");
-    printf("1. Specify field and criteria\n");
-    printf("2. Display pertinent information for retrieved entries\n");
-    printf("3. Display all information\n");
+    printf("1. Display filtered information\n");
+    printf("2. Display all information\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
 
@@ -236,6 +235,8 @@ void retrieveInformation(FILE *file) {
             rewind(file);
 
             int found = 0;
+            int entryIndex = 0;
+            struct AddressBookEntry matchingEntries[100]; // Max 100 entries for simplicity
 
             while (fscanf(file, "%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", entry.name, entry.lastName, &entry.weight, entry.date, entry.email, entry.phoneNumber) != EOF) {
                 if ((strcmp(field, "name") == 0 && strcmp(entry.name, criteria) == 0) ||
@@ -246,71 +247,36 @@ void retrieveInformation(FILE *file) {
                     (strcmp(field, "phoneNumber") == 0 && strcmp(entry.phoneNumber, criteria) == 0)) {
 
                     found = 1;
-                    printf("Entry found:\n");
-                    printf("Name: %s\nLast Name: %s\nWeight: %d\nDate: %s\nEmail: %s\nPhone Number: %s\n", 
-                        entry.name, entry.lastName, entry.weight, entry.date, entry.email, entry.phoneNumber);
-                    printf("-------------------------\n");
+                    printf("%d. Name: %s, Last Name: %s, Date: %s\n", entryIndex + 1, entry.name, entry.lastName, entry.date);
+                    matchingEntries[entryIndex] = entry;
+                    entryIndex++;
                 }
             }
 
             if (!found) {
                 printf("No matching entry found for the specified criteria.\n");
+            } else {
+                printf("Enter the index of the entry you want to view: ");
+                int selectedIndex;
+                scanf("%d", &selectedIndex);
+
+                if (selectedIndex > 0 && selectedIndex <= entryIndex) {
+                    printf("---------------\n");
+                    struct AddressBookEntry selectedEntry = matchingEntries[selectedIndex - 1];
+                    printf("Name: %s\n", selectedEntry.name);
+                    printf("Last Name: %s\n", selectedEntry.lastName);
+                    printf("Weight: %d\n", selectedEntry.weight);
+                    printf("Date: %s\n", selectedEntry.date);
+                    printf("Email: %s\n", selectedEntry.email);
+                    printf("Phone Number: %s\n", selectedEntry.phoneNumber);
+                } else {
+                    printf("Invalid index selected.\n");
+                }
             }
             break;
         }
 
         case 2:
-        {
-            char field[50];
-            char criteria[50];
-
-            printf("Enter the field for retrieval (e.g., name, lastName, weight, date, email, phoneNumber): ");
-            scanf("%s", field);
-            printf("Enter the criteria for %s: ", field);
-            scanf("%s", criteria);
-
-            rewind(file);
-
-            int found = 0;
-
-            while (fscanf(file, "%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", entry.name, entry.lastName, &entry.weight, entry.date, entry.email, entry.phoneNumber) != EOF) {
-                if ((strcmp(field, "name") == 0 && strcmp(entry.name, criteria) == 0) ||
-                    (strcmp(field, "lastName") == 0 && strcmp(entry.lastName, criteria) == 0) ||
-                    (strcmp(field, "weight") == 0 && entry.weight == atoi(criteria)) ||
-                    (strcmp(field, "date") == 0 && strcmp(entry.date, criteria) == 0) ||
-                    (strcmp(field, "email") == 0 && strcmp(entry.email, criteria) == 0) ||
-                    (strcmp(field, "phoneNumber") == 0 && strcmp(entry.phoneNumber, criteria) == 0)) {
-
-                    found = 1;
-
-                    printf("Entry found:\n");
-                    printf("Name: %s\nLast Name: %s\nWeight: %d\nDate: %s\nEmail: %s\nPhone Number: %s\n", 
-                        entry.name, entry.lastName, entry.weight, entry.date, entry.email, entry.phoneNumber);
-                    
-                    printf("Do you want to view comprehensive information for this entry? (yes/no): ");
-                    char choice[4];
-                    scanf("%s", choice);
-
-                    if (strcmp(choice, "yes") == 0) {
-                        printf("Comprehensive Information:\n");
-                        printf("Name: %s\n", entry.name);
-                        printf("Last Name: %s\n", entry.lastName);
-                        printf("Weight: %d\n", entry.weight);
-                        printf("Date: %s\n", entry.date);
-                        printf("Email: %s\n", entry.email);
-                        printf("Phone Number: %s\n", entry.phoneNumber);
-                    }
-                    printf("-------------------------\n");
-                }
-            }
-
-            if (!found) {
-                printf("No matching entry found for the specified criteria.\n");
-            }
-            break;
-        }
-
-        case 3:
             rewind(file);
             while (fscanf(file, "%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", entry.name, entry.lastName, &entry.weight, entry.date, entry.email, entry.phoneNumber) != EOF) {
                 printf("Name: %s\nLast Name: %s\nWeight: %d\nDate: %s\nEmail: %s\nPhone Number: %s\n", 
