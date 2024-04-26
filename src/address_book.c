@@ -9,6 +9,7 @@
 
 char initialFileName[100];
 
+// Function to modify a row of the dataset
 void modifyEntry(FILE *file, const char *fileName) {
     strcpy(initialFileName, fileName);
 
@@ -129,7 +130,7 @@ void modifyEntry(FILE *file, const char *fileName) {
     printf("Entry modified successfully!\n");
 }
 
-
+// Function to insert a new row into the dataset
 void saveNewEntry(FILE *file) {
     struct AddressBookEntry newEntry;
     int option;
@@ -210,7 +211,7 @@ void saveNewEntry(FILE *file) {
 }
 
 
-
+// Function to retrieve information from the dataset
 void retrieveInformation(FILE *file) {
     int choice;
     printf("\nHow would you like to search for the data?\n");
