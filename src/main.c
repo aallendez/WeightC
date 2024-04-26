@@ -12,12 +12,14 @@ int startup(const char *fileName) {
     strcpy(initialFileName, fileName);
     file = fopen(fileName, "a+"); // Open file in append mode
 
+    // Error handling
     if (file == NULL) {
         printf("Error opening file!\n");
         return 1;
     }
 
     do {
+        // Print instructions to user
         printf("\nSelect an option:\n");
         printf("1. Save/Edit new entry\n");
         printf("2. Retrieve existing information from the file that is open\n");
@@ -26,6 +28,7 @@ int startup(const char *fileName) {
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
+        // Switch to decide which action to take with the dataset
         switch (choice) {
             case 1:
                 saveNewEntry(file);
@@ -47,6 +50,7 @@ int startup(const char *fileName) {
         }
     } while (choice != 3);
 
+    // Close the file
     fclose(file);
     return 0;
 }
@@ -57,4 +61,4 @@ int main() {
     return startup(fileName);
 }
 
-//                                                  gcc -o address_book main.c address_book.c validation.c 
+// To compile and execute, type the following code on your terminal ---> gcc -o address_book main.c address_book.c validation.c 
