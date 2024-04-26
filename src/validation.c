@@ -83,3 +83,7 @@ bool validatePhoneNumber(const char *phoneNumber) {
     return digit_count >= 7; 
 }
 
+bool validateWeight(int weight) {
+    return weight >= 0; 
+}
+

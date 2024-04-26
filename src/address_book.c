@@ -1,16 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "address_book.h"
 #include "time.h"
 #include "validation.h"
 
 #define MAX_LINE_SIZE 1024 
-
-char initialFileName[100];
+char fileName[100];
 
 void modifyEntry(FILE *file, const char *fileName) {
-    strcpy(initialFileName, fileName);
 
     printf("Existing entries:\n");
     int index = 1;
@@ -34,9 +33,14 @@ void modifyEntry(FILE *file, const char *fileName) {
         exit(EXIT_FAILURE);
     }
 
+    bool found = false;
+    int num;
     int currentEntry = 1;
+
+
     while (fscanf(file, "%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", entry.name, entry.lastName, &entry.weight, entry.date, entry.email, entry.phoneNumber) != EOF) {
         if (currentEntry == entryNumber) {
+            found = true;
             // Modify selected entry
             printf("Modify entry:\n");
             printf("Select the field you want to modify:\n");
@@ -70,22 +74,40 @@ void modifyEntry(FILE *file, const char *fileName) {
                 case 3:
                     printf("Enter new weight (Integer): ");
                     scanf("%d", &entry.weight);
-                    break;
-                case 4:
-                    printf("To use current date, press 1. To enter an old date, press 2: ");
-                    int dateChoice;
-                    scanf("%d", &dateChoice);
-                    if (dateChoice == 2) {
-                        printf("Enter the old date (DD-MM-YYYY): ");
-                        scanf("%s", entry.date);
-                    } else {
-                        // Get current date
-                        time_t currentTime;
-                        time(&currentTime);
-                        struct tm *localTime = localtime(&currentTime);
-                        sprintf(entry.date, "%02d-%02d-%04d", localTime->tm_mday, localTime->tm_mon + 1, localTime->tm_year + 1900);
+                    while (!validateWeight(entry.weight)) {
+                        printf("Invalid weight format. Enter a last name with only non-negative digits: ");
+                        scanf("%s", entry.weight);
                     }
                     break;
+                case 4:
+                     
+
+                    while (1) {
+                        printf("To use current date Press 1:\n");
+                        printf("To enter old date Press 2:\n");
+                        printf("Enter your choice: ");
+                        scanf("%d", &num); 
+
+                        if (num == 2) {
+                            printf("Enter the old date (DD-MM-YYYY): ");
+                            scanf("%s",entry.date);
+                        } else if (num == 1) {
+                            time_t currentTime;
+                            time(&currentTime);
+                            struct tm *localTime = localtime(&currentTime);
+                            sprintf(entry.date, "%02d-%02d-%04d", localTime->tm_mday, localTime->tm_mon + 1, localTime->tm_year + 1900);
+                        } else {
+                            printf("Invalid choice. Please try again: ");
+                            continue; 
+                        }
+
+                        if (!validateDate(entry.date)) {
+                            printf("Invalid date format. Enter a valid date (DD-MM-YYYY): ");
+                            continue; 
+                        }
+
+                        break;
+                    }
                 case 5:
                     printf("Enter new email: ");
                     scanf("%s", entry.email);
@@ -120,13 +142,21 @@ void modifyEntry(FILE *file, const char *fileName) {
         currentEntry++;
     }
 
+    if (!found) {
+        printf("Invalid entry index. No entry found with the specified index.\n");
+        fclose(file);
+        fclose(tempFile);
+        remove("temp.csv");
+        return;
+    }
+
     fclose(file);
     fclose(tempFile);
 
-    remove(initialFileName); 
-    rename("temp.csv", initialFileName); 
+    remove(fileName); 
+    rename("temp.csv", fileName); 
     FILE *file1;
-    file1 = fopen(initialFileName, "a+");    
+    file1 = fopen(fileName, "a+");    
     printf("Entry modified successfully!\n");
 }
 
@@ -138,6 +168,7 @@ void saveNewEntry(FILE *file) {
     printf("\nEnter details for the new entry:\n");
     printf("1. Add new entry\n");
     printf("2. Modify existing entry\n");
+    printf("3. Delete existing entry\n");
     printf("Enter your choice: ");
     scanf("%d", &option);
 
@@ -158,27 +189,39 @@ void saveNewEntry(FILE *file) {
         
         printf("Weight (Integer): ");
         scanf("%d", &newEntry.weight);
-        
-        int num; // Declare num variable.
-        printf("To use current date Press 1:\n");
-        printf("To enter old date Press 2:\n");
-        printf("Enter your choice: ");
-        scanf("%d", &num); 
-        /*EDIT THISSSSSS*/
-
-        if (num == 2) {
-            printf("Enter the old date (DD-MM-YYYY): ");
-            scanf("%s", newEntry.date);
-        } else if (num == 1) {
-            time_t currentTime;
-            time(&currentTime);
-            struct tm *localTime = localtime(&currentTime);
-            sprintf(newEntry.date, "%02d-%02d-%04d", localTime->tm_mday, localTime->tm_mon + 1, localTime->tm_year + 1900);
+        while (!validateWeight(newEntry.weight)) {
+            printf("Invalid weight format. Enter a last name with only non-negative digits: ");
+            scanf("%s", newEntry.weight);
         }
+        
 
-        while (!validateDate(newEntry.date)) {
-            printf("Invalid date format. Enter a valid date (DD-MM-YYYY): ");
-            scanf("%s", newEntry.date);
+        int num; // Declare num variable.
+
+        while (1) {
+            printf("To use current date Press 1:\n");
+            printf("To enter old date Press 2:\n");
+            printf("Enter your choice: ");
+            scanf("%d", &num); 
+
+            if (num == 2) {
+                printf("Enter the old date (DD-MM-YYYY): ");
+                scanf("%s", newEntry.date);
+            } else if (num == 1) {
+                time_t currentTime;
+                time(&currentTime);
+                struct tm *localTime = localtime(&currentTime);
+                sprintf(newEntry.date, "%02d-%02d-%04d", localTime->tm_mday, localTime->tm_mon + 1, localTime->tm_year + 1900);
+            } else {
+                printf("Invalid choice. Please try again: ");
+                continue; 
+            }
+
+            if (!validateDate(newEntry.date)) {
+                printf("Invalid date format. Enter a valid date (DD-MM-YYYY): ");
+                continue; 
+            }
+
+            break;
         }
 
         printf("Email: ");
@@ -205,7 +248,9 @@ void saveNewEntry(FILE *file) {
         printf("New entry added successfully!\n");
 
     } else if (option == 2) {  
-        modifyEntry(file, initialFileName);
+        modifyEntry(file, fileName);
+    } else if (option == 3) {
+        deleteEntry(file);
     } else {
         printf("Invalid choice. Please try again.\n");
     }
@@ -290,4 +335,52 @@ void retrieveInformation(FILE *file) {
             printf("Invalid choice. Please try again.\n");
             break;
     }
+}
+
+void deleteEntry(FILE *file) {
+    FILE *tempFile = fopen("temp.csv", "w");
+    if (tempFile == NULL) {
+        printf("Error creating temporary file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int index = 1;
+    int entryNumber;
+    printf("Existing entries:\n");
+    struct AddressBookEntry entry;
+
+    rewind(file);
+    while (fscanf(file, "%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", entry.name, entry.lastName, &entry.weight, entry.date, entry.email, entry.phoneNumber) != EOF) {
+        printf("%d. %s %s\n", index, entry.name, entry.lastName);
+        index++;
+    }
+
+    printf("\nEnter the index of the entry you want to delete: ");
+    scanf("%d", &entryNumber);
+
+    rewind(file);
+    int currentEntry = 1;
+    bool found = false;
+
+    while (fscanf(file, "%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", entry.name, entry.lastName, &entry.weight, entry.date, entry.email, entry.phoneNumber) != EOF) {
+        if (currentEntry != entryNumber) {
+            fprintf(tempFile, "%s,%s,%d,%s,%s,%s\n", entry.name, entry.lastName, entry.weight, entry.date, entry.email, entry.phoneNumber);
+        } else {
+            found = true;
+        }
+        currentEntry++;
+    }
+
+    if (!found) {
+        printf("Invalid entry index. No entry found with the specified index.\n");
+    } else {
+        printf("Entry deleted successfully!\n");
+    }
+
+    fclose(file);
+    fclose(tempFile);
+    remove(fileName); 
+    rename("temp.csv", fileName); 
+    FILE *file2;
+    file2 = fopen("fileName", "a+");    
 }

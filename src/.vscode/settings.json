@@ -3,6 +3,8 @@
         "stdio.h": "c",
         "string.h": "c",
         "address_book.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "validation.h": "c",
+        "stdbool.h": "c"
     }
 }

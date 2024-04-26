@@ -6,5 +6,6 @@ bool validateEmail(const char *email);
 bool validatePhoneNumber(const char *phoneNumber);
 bool validateDate(const char *date);
 bool validateString(const char *str);
+bool validateWeight(int weight);
 
 #endif /* VALIDATION_H */

@@ -7,10 +7,9 @@
 char fileName[100];
 
 int startup(const char *fileName) {
-    strcpy(initialFileName, fileName);
     int choice;
     FILE *file;
-    file = fopen(fileName, "a+"); // Open file in append mode
+    file = fopen(fileName, "a+"); 
 
     if (file == NULL) {
         printf("Error opening file!\n");
@@ -19,7 +18,7 @@ int startup(const char *fileName) {
 
     do {
         printf("\nSelect an option:\n");
-        printf("1. Save/Edit new entry\n");
+        printf("1. Save/Edit/Delete entry\n");
         printf("2. Retrieve existing information from the file that is open\n");
         printf("3. Exit\n");
         printf("4. Change the file\n");

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern char initialFileName[100];
+extern char fileName[100];
 
 struct AddressBookEntry {
     char name[50];
@@ -19,5 +19,6 @@ struct AddressBookEntry {
 void saveNewEntry(FILE *file);
 void retrieveInformation(FILE *file);
 void modifyEntry(FILE *file, const char *fileName);
+void deleteEntry(FILE *file);
 
 #endif /* ADDRESS_BOOK_H */
