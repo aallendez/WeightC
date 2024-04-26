@@ -16,6 +16,7 @@ void modifyEntry(FILE *file, const char *fileName) {
     int index = 1;
     struct AddressBookEntry entry;
     rewind(file);
+
     while (fscanf(file, "%[^,],%[^,],%d,%[^,],%[^,],%[^\n]\n", entry.name, entry.lastName, &entry.weight, entry.date, entry.email, entry.phoneNumber) != EOF) {
         printf("%d. %s %s\n", index, entry.name, entry.lastName);
         index++;
@@ -122,8 +123,8 @@ void modifyEntry(FILE *file, const char *fileName) {
     fclose(file);
     fclose(tempFile);
 
-    remove(initialFileName); // Use the initial file name variable
-    rename("temp.csv", initialFileName); // Use the initial file name variable
+    remove(initialFileName); 
+    rename("temp.csv", initialFileName); 
     FILE *file1;
     file1 = fopen(initialFileName, "a+");    
     printf("Entry modified successfully!\n");
@@ -159,15 +160,16 @@ void saveNewEntry(FILE *file) {
         scanf("%d", &newEntry.weight);
         
         int num; // Declare num variable.
-        printf("To Use current date Press 1:\n");
+        printf("To use current date Press 1:\n");
         printf("To enter old date Press 2:\n");
         printf("Enter your choice: ");
         scanf("%d", &num); 
+        /*EDIT THISSSSSS*/
 
         if (num == 2) {
             printf("Enter the old date (DD-MM-YYYY): ");
             scanf("%s", newEntry.date);
-        } else {
+        } else if (num == 1) {
             time_t currentTime;
             time(&currentTime);
             struct tm *localTime = localtime(&currentTime);
@@ -208,7 +210,6 @@ void saveNewEntry(FILE *file) {
         printf("Invalid choice. Please try again.\n");
     }
 }
-
 
 
 void retrieveInformation(FILE *file) {

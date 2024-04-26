@@ -7,9 +7,9 @@
 char fileName[100];
 
 int startup(const char *fileName) {
+    strcpy(initialFileName, fileName);
     int choice;
     FILE *file;
-    strcpy(initialFileName, fileName);
     file = fopen(fileName, "a+"); // Open file in append mode
 
     if (file == NULL) {

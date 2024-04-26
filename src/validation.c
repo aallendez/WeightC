@@ -56,7 +56,7 @@ bool validateDate(const char *date) {
     int year = (date[6] - '0') * 1000 + (date[7] - '0') * 100 + (date[8] - '0') * 10 + (date[9] - '0');
 
     // Validate day, month, and year ranges
-    if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > 2100) {
+    if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > 2025) {
         return false;
     }
 
@@ -71,6 +71,12 @@ bool validatePhoneNumber(const char *phoneNumber) {
     for (int i = 0; i < length; i++) {
         if (isdigit(phoneNumber[i])) {
             digit_count++;
+        }
+    }
+
+    for (int i = 0; i < length; i++) {
+        if (!isdigit(phoneNumber[i])) {
+            return false;
         }
     }
     
