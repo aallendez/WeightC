@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+// Validate input when is string
 bool validateString(const char *str) {
     int length = strlen(str);
     for (int i = 0; i < length; i++) {
@@ -14,6 +15,7 @@ bool validateString(const char *str) {
     return true;
 }
 
+// Validate input when is email adress
 bool validateEmail(const char *email) {
     int at_count = 0;
     int dot_count = 0;
@@ -30,6 +32,7 @@ bool validateEmail(const char *email) {
     return at_count == 1 && dot_count >= 1;
 }
 
+// Validate input when is a date
 bool validateDate(const char *date) {
     int length = strlen(date);
 
@@ -63,7 +66,7 @@ bool validateDate(const char *date) {
     return true;
 }
 
-
+// Validate input when is a phone number
 bool validatePhoneNumber(const char *phoneNumber) {
     int digit_count = 0;
     int length = strlen(phoneNumber);
